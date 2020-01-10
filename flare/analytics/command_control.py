@@ -299,7 +299,7 @@ class elasticBeacon(object):
                                 self.beacon_timestamp, FLOW_BYTES, self.beacon_flow_id)
         self.dprint(query)
         resp = helpers.scan(query=query, client=self.es, scroll="90m", index=self.es_index, timeout="10m")
-        df = pd.DataFrame([rec['_source'] for rec in resp])
+        df = pd.DataFrame(pd.io.json.json_normalize([rec['_source'] for rec in resp]))
         if len(df) == 0:
             raise Exception("Elasticsearch did not retrieve any data. Please ensure your settings are correct inside the config file.")
 
